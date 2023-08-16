@@ -106,4 +106,6 @@ int _(esc)()
       }
       break;
   }
+
+  return 0;
 }

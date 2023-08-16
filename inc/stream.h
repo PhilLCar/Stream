@@ -26,7 +26,7 @@ OBJECT (void*,
 END_OBJECT;
 
 #define FROM_STREAM(TYPESTREAM, TAG) \
-static Stream *EXPAND2(from, TYPESTREAM)(TYPESTREAM *stream) {\
+__attribute__((unused)) static Stream *EXPAND2(from, TYPESTREAM)(TYPESTREAM *stream) {\
   return NEW (Stream) ((void*) stream, \
                        (const int(*)(void*))TAG ## getc, \
                        (const int(*)(void*))TAG ## peek, \
