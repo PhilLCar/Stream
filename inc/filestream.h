@@ -6,21 +6,39 @@
 
 // CUT
 #include <stream.h>
+#include <oop.h>
 
 typedef FILE FileStream;
 
-static int fpeek(FileStream *fptr)
+static void fungetc(FileStream *fptr, char c)
 {
-    int c;
-
-    c = fgetc(fptr);
-    ungetc(c, fptr);
-
-    return c;
+  ungetc(c, fptr);
 }
 
-static int (*fungetc)(int, FileStream *) = ungetc;
+static int fpeek(FileStream *fptr)
+{
+  int c;
 
-FROM_STREAM(FileStream, f);
+  c = fgetc(fptr);
+  fungetc(fptr, c);
+
+  return c;
+}
+
+#define TYPENAME File
+
+FOREIGN_VIRTUAL(close,  fclose);
+FOREIGN_VIRTUAL(getc,   fgetc);
+FOREIGN_VIRTUAL(peek,   fpeek);
+FOREIGN_VIRTUAL(ungetc, fungetc);
+
+FROM_STREAM;
+
+#undef TYPENAME
+
+static Stream *fromFile(const char *filename, const char *mode)
+{
+  return fromFileStream(fopen(filename, mode));
+}
 
 #endif

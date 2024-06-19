@@ -3,18 +3,16 @@
 #define TYPENAME Stream
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(cons)(void *base, 
-                const int(*getc)(void*),
-                const int(*peek)(void*), 
-                const void(*ungetc)(int, void*),
-                const void(*close)(void*))
+TYPENAME *_(cons)(void *stream, const char *typename)
 {
   if (_this) {
-    _this->base   = base;
-    _this->getc   = getc;
-    _this->peek   = peek;
-    _this->ungetc = ungetc;
-    _this->close  = close;
+    _this->base   = stream;
+
+    // V-lookup only once
+    _this->getc   = (void*)_virtual("getc",   typename);
+    _this->peek   = (void*)_virtual("peek",   typename);
+    _this->ungetc = (void*)_virtual("ungetc", typename);
+    _this->close  = (void*)_virtual("close",  typename);
   }
   
   return _this;
@@ -45,7 +43,8 @@ int _(getc)()
 ////////////////////////////////////////////////////////////////////////////////
 void _(ungetc)(char c)
 {
-  _this->ungetc(c, _this->base);
+  _this->ungetc(_this->base, c);
+  _this->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -12,43 +12,51 @@
 
 #define TYPENAME Stream
 
-OBJECT (void*,
-        const int(*)(void*),
-        const int(*)(void*), 
-        const void(*)(int, void*),
-        const void(*)(void*)) INHERIT (void*)
+OBJECT (void *stream, const char *typename) INHERIT (void*)
+  const int  (*getc)  (void*);
+  const int  (*peek)  (void*);
+  const void (*ungetc)(void*, int);
+  const void (*close) (void*);
 
-  const int  (*getc)(void*);
-  const int  (*peek)(void*);
-  const void (*ungetc)(int, void*);
-  const void (*close)(void*);
-  int    eos;
+  int eos;
 END_OBJECT;
 
-#define FROM_STREAM(TYPESTREAM, TAG) \
-__attribute__((unused)) static Stream *EXPAND2(from, TYPESTREAM)(TYPESTREAM *stream) {\
-  return NEW (Stream) ((void*) stream, \
-                       (const int(*)(void*))TAG ## getc, \
-                       (const int(*)(void*))TAG ## peek, \
-                       (const void(*)(int, void*))TAG ## ungetc, \
-                       (const void(*)(void*))TAG ## close);\
+#define FROM_STREAM \
+__attribute((unused)) static Stream *EXPAND3(from, TYPENAME, Stream)(EXPAND2(TYPENAME, Stream) *stream) {\
+  return NEW (Stream) (stream, STRINGIZE(TYPENAME));\
 }
 
-#define STREAMABLE(TAG) typedef struct {\
-  EXPAND(TYPENAME) *base;\
-  int   pos;\
-} EXPAND2(TYPENAME, Stream);\
-EXPAND2(TYPENAME, Stream) *TAG ## open(EXPAND(TYPENAME) *base);\
-void TAG ## close(EXPAND2(TYPENAME, Stream) *TAG);\
-int TAG ## getc(EXPAND2(TYPENAME, Stream) *TAG);\
-int TAG ## peek(EXPAND2(TYPENAME, Stream) *TAG);\
-void TAG ## ungetc(int c, EXPAND2(TYPENAME, Stream) *TAG);\
-FROM_STREAM(EXPAND2(TYPENAME, Stream), TAG)
+#define FROM_OBJECT \
+__attribute((unused)) static Stream *EXPAND2(from, TYPENAME)(TYPENAME *base) {\
+  return EXPAND3(from, TYPENAME, Stream)(EXPAND2(TYPENAME, _open)(base));\
+}
 
-int  _(peek)();
+#define STREAMABLE \
+typedef struct {\
+  EXPAND(TYPENAME) *base;\
+  int               pos;\
+} EXPAND2(TYPENAME, Stream);\
+\
+EXPAND2(TYPENAME, Stream) *EXPAND2(TYPENAME, _open  )(EXPAND(TYPENAME) *base);\
+void                       EXPAND2(TYPENAME, _close )(EXPAND2(TYPENAME, Stream) *stream)        VIRTUAL (close);\
+int                        EXPAND2(TYPENAME, _getc  )(EXPAND2(TYPENAME, Stream) *stream)        VIRTUAL (getc);\
+void                       EXPAND2(TYPENAME, _ungetc)(EXPAND2(TYPENAME, Stream) *stream, int c) VIRTUAL (ungetc);\
+int                        EXPAND2(TYPENAME, _peek  )(EXPAND2(TYPENAME, Stream) *stream)        VIRTUAL (peek);\
+\
+EXPAND(FROM_STREAM)\
+EXPAND(FROM_OBJECT)
+
+void _(close)();
 int  _(getc)();
 void _(ungetc)(char c);
-void _(close)();
+int  _(peek)();
 int  _(esc)();
 #undef TYPENAME
+
+// Shortnames
+__attribute((unused)) static void (*sclose) (Stream*)       = Stream_close;
+__attribute((unused)) static int  (*sgetc)  (Stream*)       = Stream_getc;
+__attribute((unused)) static void (*sungetc)(Stream*, char) = Stream_ungetc;
+__attribute((unused)) static int  (*speek)  (Stream*)       = Stream_peek;
+__attribute((unused)) static int  (*sesc)   (Stream*)       = Stream_esc;
 #endif
