@@ -3,7 +3,7 @@
 #define TYPENAME Stream
 
 ////////////////////////////////////////////////////////////////////////////////
-Stream *_(cons)(void *base, 
+TYPENAME *_(cons)(void *base, 
                 const int(*getc)(void*),
                 const int(*peek)(void*), 
                 const void(*ungetc)(int, void*),
