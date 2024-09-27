@@ -1,19 +1,21 @@
 #include <stdio.h>
 
-#include <stream.h>
+#include <charstream.h>
 #include <filestream.h>
+#include <stream.h>
 
 int main(void)
 {
   CHECK_MEMORY
 
-  Stream *test = fromFile("tst/test.txt", "r");
+  CharStream *test = (CharStream*) NEW (FileStream) ("tst/test.txt", "r");
 
+  printf("Initialized\n");
   while (1)
   {
-    char c = sgetc(test);
+    char c = CharStream_get(test);
 
-    if (test->eos) break;
+    if (seos(test)) break;
 
     if (c == '?')
     {

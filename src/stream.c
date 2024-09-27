@@ -3,108 +3,52 @@
 #define TYPENAME Stream
 
 ////////////////////////////////////////////////////////////////////////////////
-TYPENAME *_(cons)(void *stream, const char *typename)
+Stream *_(cons)(void *stream)
 {
-  if (_this) {
-    _this->base   = stream;
+  if (this) {
+    const Type *type = gettype(this);
 
-    // V-lookup only once
-    _this->getc   = (void*)_virtual("getc",   typename);
-    _this->peek   = (void*)_virtual("peek",   typename);
-    _this->ungetc = (void*)_virtual("ungetc", typename);
-    _this->close  = (void*)_virtual("close",  typename);
+    // This will fail if abstract class is not implemented
+    this->get    = (void*)virtual(type, "get");
+    this->peek   = (void*)virtual(type, "peek");
+    this->unget  = (void*)virtual(type, "unget");
+    this->close  = (void*)virtual(type, "close");
+
+    if (!this->get || !this->peek || !this->unget || !this->close) {
+      this = NULL;
+    } else {
+      this->base = stream;
+    }
   }
   
-  return _this;
+  return this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void _(free)()
 {
-  _this->close(_this->base);
+  this->close(this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(peek)()
+const void *_(peek)()
 {
-  return _this->peek(_this->base);
+  return this->peek(this->base);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(getc)()
+const void *_(get)()
 {
-  int c = _this->getc(_this->base);
+  const void *token = this->get(this->base);
 
-  _this->eos = c == EOF;
+  this->eos = token == EOS;
 
-  return c;
+  return token;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(ungetc)(char c)
+const void _(unget)(const void *token)
 {
-  _this->ungetc(_this->base, c);
-  _this->eos = 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void _(close)()
-{
-  DELETE (_this);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-int _(esc)()
-{
-  char c = _this->getc(_this->base);
-
-  switch (c) {
-    // https://en.wikipedia.org/wiki/Escape_sequences_in_C
-    case 'a':
-      c = '\a';
-      break;
-    case 'b':
-      c = '\b';
-      break;
-    case 'e':
-      c = '\e';
-      break;
-    case 'f':
-      c = '\f';
-      break;
-    case 'n':
-      c = '\n';
-      break;
-    case 'r':
-      c = '\r';
-      break;
-    case 't':
-      c = '\t';
-      break;
-    case 'v':
-			c = '\v';
-      break;
-    case '\\':
-    case '\'':
-    case '\"':
-    case '\n':
-    case '?':
-			// do nothing
-      break;
-    case 'x': // hexa
-      break;
-    case 'X': // HEXA
-    case 'u': // unicode (2 bytes)
-      break;
-    case 'U': // unicode (4 bytes)
-      break;
-    default:
-    // TODO: (medium): Incomplete: Parse numeric escapes
-      if (c > '0' && c <= '9') {
-      } else if (c == '0') {
-      }
-      break;
-  }
-
-  return 0;
+  this->unget(this->base, token);
+  this->eos = 0;
 }

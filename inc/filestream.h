@@ -5,40 +5,18 @@
 #include <stdio.h>
 
 // CUT
-#include <stream.h>
+#include <charstream.h>
 #include <oop.h>
 
-typedef FILE FileStream;
+#define TYPENAME FileStream
 
-static void fungetc(FileStream *fptr, char c)
-{
-  ungetc(c, fptr);
-}
+OBJECT (const char *filename, const char *mode) INHERIT (CharStream)
+END("", "");
 
-static int fpeek(FileStream *fptr)
-{
-  int c;
+void  _(close)()            VIRTUAL (close);
+void *_(peek) ()            VIRTUAL (peek);
+void *_(get)  ()            VIRTUAL (get);
+void  _(unget)(void *token) VIRTUAL (unget);
 
-  c = fgetc(fptr);
-  fungetc(fptr, c);
-
-  return c;
-}
-
-#define TYPENAME File
-
-FOREIGN_VIRTUAL(close,  fclose);
-FOREIGN_VIRTUAL(getc,   fgetc);
-FOREIGN_VIRTUAL(peek,   fpeek);
-FOREIGN_VIRTUAL(ungetc, fungetc);
-
-FROM_STREAM;
-
-#undef TYPENAME
-
-static Stream *fromFile(const char *filename, const char *mode)
-{
-  return fromFileStream(fopen(filename, mode));
-}
 
 #endif
