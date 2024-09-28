@@ -21,24 +21,24 @@ void _(free)()
 
 void _(close)()
 {
-  fclose((FILE*)BASE(2));
+  fclose(*BASE(2));
 }
 
 void *_(peek)()
 {
-  long c = fgetc((FILE*)BASE(2));
+  long c = fgetc(*BASE(2));
 
-  ungetc(c, (FILE*)BASE(2));
+  ungetc(c, *BASE(2));
 
   return (void*)c;
 }
 
 void *_(get)()
 {
-  return (void*)(long)fgetc((FILE*)BASE(2));
+  return (void*)(long)fgetc(*BASE(2));
 }
 
 void _(unget)(void *token)
 {
-  ungetc((long)token, (FILE*)BASE(2));
+  ungetc((long)token, *BASE(2));
 }

@@ -18,10 +18,10 @@ OBJECT (void *stream) INHERIT (void*)
   int eos;
 
   // Abstract methods
-  const void  (*close)(void *stream);
-  const void *(*peek) (void *stream);
-  const void *(*get)  (void *stream);
-  const void  (*unget)(void *stream, const void *token);
+  const void  (*close)(Stream *stream);
+  const void *(*peek) (Stream *stream);
+  const void *(*get)  (Stream *stream);
+  const void  (*unget)(Stream *stream, const void *token);
 END(NULL);
 
 const void *_(peek)();

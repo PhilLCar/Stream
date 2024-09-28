@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 CharStream *_(cons)(void *stream)
 {
-  Stream_cons(BASE(0), stream);
+  if (this) Stream_cons(BASE(0), stream);
   
   return this;
 }
