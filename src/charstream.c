@@ -166,3 +166,33 @@ int _(eos)()
 {
   return BASE(0)->eos;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+void _(putstr)(const char *line)
+{
+	for (int i = 0; line[i]; i++) {
+		CharStream_put(this, line[i]);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(writestr)(const char *line)
+{
+	for (int i = 0; line[i]; i++) {
+		CharStream_write(this, line[i]);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(putline)(const char *line)
+{
+	CharStream_putstr(this, line);
+	CharStream_put(this, '\n');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(writeline)(const char *line)
+{
+	CharStream_writestr(this, line);
+	CharStream_put(this, '\n');
+}
