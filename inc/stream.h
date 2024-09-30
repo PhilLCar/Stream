@@ -22,11 +22,13 @@ OBJECT (void *stream) INHERIT (void*)
   const void *(*peek) (Stream *stream);
   const void *(*get)  (Stream *stream);
   const void  (*unget)(Stream *stream, const void *token);
+  const void  (*put)  (Stream *stream, const void *token);
 END(NULL);
 
 const void *_(peek)();
 const void *_(get)();
 const void  _(unget)(const void *token);
+const void  _(put)(const void *token);
 
 #undef TYPENAME
 #endif

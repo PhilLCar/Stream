@@ -15,11 +15,11 @@ int main(void)
   {
     char c = CharStream_get(test);
 
-    if (seos(test)) break;
+    if (cseos(test)) break;
 
     if (c == '?')
     {
-      sungetc(test, '.');
+      csunget(test, '.');
       continue;
     }
 

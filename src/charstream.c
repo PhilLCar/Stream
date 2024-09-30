@@ -35,62 +35,130 @@ void _(unget)(char c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(esc)()
+void _(put)(char c)
+{
+  Stream_put(BASE(0), (void*)(long)c);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(read)()
 {
   char c = CharStream_get(this);
+  
+  if (c == '\\') {
+    c = CharStream_get(this);
+
+    switch (c) {
+      // https://en.wikipedia.org/wiki/Escape_sequences_in_C
+      case 'a':
+        c = '\a';
+        break;
+      case 'b':
+        c = '\b';
+        break;
+      case 'e':
+        c = '\e';
+        break;
+      case 'f':
+        c = '\f';
+        break;
+      case 'n':
+        c = '\n';
+        break;
+      case 'r':
+        c = '\r';
+        break;
+      case 's':
+        c = ' ';
+        break;
+      case 't':
+        c = '\t';
+        break;
+      case 'v':
+        c = '\v';
+        break;
+      case '\\':
+      case '\'':
+      case '\"':
+      case '\n':
+      case '?':
+        // do nothing
+        break;
+      case 'x': // hexa
+        break;
+      case 'X': // HEXA
+      case 'u': // unicode (2 bytes)
+        break;
+      case 'U': // unicode (4 bytes)
+        break;
+      default:
+      // TODO: (medium): Incomplete: Parse numeric escapes
+        if (c > '0' && c <= '9') {
+        } else if (c == '0') {
+        }
+        break;
+    }
+  }
+
+  return c;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(write)(char c)
+{
+  char esc = '\\';
 
   switch (c) {
     // https://en.wikipedia.org/wiki/Escape_sequences_in_C
-    case 'a':
-      c = '\a';
+    case '\a':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'a');
       break;
-    case 'b':
-      c = '\b';
+    case '\b':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'b');
       break;
-    case 'e':
-      c = '\e';
+    case '\e':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'e');
       break;
-    case 'f':
-      c = '\f';
+    case '\f':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'f');
       break;
-    case 'n':
-      c = '\n';
+    case '\n':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'n');
       break;
-    case 'r':
-      c = '\r';
+    case '\r':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'r');
       break;
-    case 's':
-      c = ' ';
+    case '\t':
+      CharStream_put(this, esc);
+      CharStream_put(this, 't');
       break;
-    case 't':
-      c = '\t';
-      break;
-    case 'v':
-			c = '\v';
+    case '\v':
+      CharStream_put(this, esc);
+      CharStream_put(this, 'v');
       break;
     case '\\':
+      CharStream_put(this, esc);
+      CharStream_put(this, '\\');
+      break;
     case '\'':
+      CharStream_put(this, esc);
+      CharStream_put(this, '\'');
+      break;
     case '\"':
-    case '\n':
-    case '?':
-			// do nothing
+      CharStream_put(this, esc);
+      CharStream_put(this, '\"');
       break;
-    case 'x': // hexa
-      break;
-    case 'X': // HEXA
-    case 'u': // unicode (2 bytes)
-      break;
-    case 'U': // unicode (4 bytes)
-      break;
+    // TODO: (medium): Incomplete: Produce numeric escapes
     default:
-    // TODO: (medium): Incomplete: Parse numeric escapes
-      if (c > '0' && c <= '9') {
-      } else if (c == '0') {
-      }
+      CharStream_put(this, c);
       break;
   }
-
-  return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

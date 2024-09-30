@@ -9,12 +9,13 @@ Stream *_(cons)(void *stream)
     const Type *type = gettype(this);
 
     // This will fail if abstract class is not implemented
+    this->close  = (void*)virtual(type, "close");
     this->get    = (void*)virtual(type, "get");
     this->peek   = (void*)virtual(type, "peek");
     this->unget  = (void*)virtual(type, "unget");
-    this->close  = (void*)virtual(type, "close");
+    this->put    = (void*)virtual(type, "put");
 
-    if (!this->get || !this->peek || !this->unget || !this->close) {
+    if (!this->close || !this->get || !this->peek || !this->unget || !this->put) {
       this = NULL;
     } else {
       this->base = stream;
@@ -51,4 +52,10 @@ const void _(unget)(const void *token)
 {
   this->unget(this, token);
   this->eos = 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const void _(put)(const void *token)
+{
+  this->put(this, token);
 }

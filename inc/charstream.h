@@ -20,14 +20,18 @@ END(NULL);
 int  _(peek)();
 int  _(get)();
 void _(unget)(char c);
-int  _(esc)();
+void _(put)(char c);
+int  _(read)();
+void _(write)(char c);
 int  _(eos)();
 
 #undef TYPENAME
 // Shortnames
-__attribute__((unused)) static int  (*sgetc)  (CharStream*)       = CharStream_get;
-__attribute__((unused)) static void (*sungetc)(CharStream*, char) = CharStream_unget;
-__attribute__((unused)) static int  (*speek)  (CharStream*)       = CharStream_peek;
-__attribute__((unused)) static int  (*sesc)   (CharStream*)       = CharStream_esc;
-__attribute__((unused)) static int  (*seos)   (CharStream*)       = CharStream_eos;
+__attribute__((unused)) static int  (*cspeek) (CharStream*)       = CharStream_peek;
+__attribute__((unused)) static int  (*csget)  (CharStream*)       = CharStream_get;
+__attribute__((unused)) static void (*csunget)(CharStream*, char) = CharStream_unget;
+__attribute__((unused)) static int  (*csread) (CharStream*)       = CharStream_read;
+__attribute__((unused)) static void (*csput)  (CharStream*, char) = CharStream_put;
+__attribute__((unused)) static void (*cswrite)(CharStream*, char) = CharStream_write;
+__attribute__((unused)) static int  (*cseos)  (CharStream*)       = CharStream_eos;
 #endif

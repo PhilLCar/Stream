@@ -48,3 +48,9 @@ void _(unget)(void *token)
 {
   ungetc((long)token, *BASE(2));
 }
+
+////////////////////////////////////////////////////////////////////////////////
+void _(put)(void *token)
+{
+  fputc((long)token, *BASE(2));
+}
