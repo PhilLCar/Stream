@@ -3,11 +3,9 @@
 #define TYPENAME FileStream
 
 ////////////////////////////////////////////////////////////////////////////////
-FileStream *_(cons)(const char *filename, const char *mode)
+FileStream *_(cons)(FILE *stream)
 {
   if (this) {
-    FILE *stream = fopen(filename, mode);
-
     if (stream) CharStream_cons(BASE(0), stream);
     else        this = NULL;
   }

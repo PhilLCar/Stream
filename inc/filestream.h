@@ -10,8 +10,8 @@
 
 #define TYPENAME FileStream
 
-OBJECT (const char *filename, const char *mode) INHERIT (CharStream)
-END("", "");
+OBJECT (FILE *file) INHERIT (CharStream)
+END(stdin);
 
 void  _(close)()            VIRTUAL (close);
 void *_(peek) ()            VIRTUAL (peek);

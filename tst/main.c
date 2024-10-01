@@ -8,12 +8,12 @@ int main(void)
 {
   CHECK_MEMORY
 
-  CharStream *test = (CharStream*) NEW (FileStream) ("tst/test.txt", "r");
+  CharStream *test = (CharStream*) NEW (FileStream) (fopen("tst/test.txt", "r"));
 
   printf("Initialized\n");
   while (1)
   {
-    char c = CharStream_get(test);
+    char c = csget(test);
 
     if (cseos(test)) break;
 
@@ -21,6 +21,8 @@ int main(void)
     {
       csunget(test, '.');
       continue;
+    } else if (c == 't' && cspeek(test) == ' ') {
+      csunget(test, ',');
     }
 
     printf("%c", c);
