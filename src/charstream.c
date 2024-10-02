@@ -41,9 +41,15 @@ void _(put)(char c)
 ////////////////////////////////////////////////////////////////////////////////
 int _(read)()
 {
+  return CharStream_readwith(this, '\\');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int _(readwith)(char escape)
+{
   char c = CharStream_get(this);
   
-  if (c == '\\') {
+  if (c == escape) {
     c = CharStream_get(this);
 
     switch (c) {
@@ -104,52 +110,56 @@ int _(read)()
 ////////////////////////////////////////////////////////////////////////////////
 void _(write)(char c)
 {
-  char esc = '\\';
+  CharStream_writewith(this, '\\', c);
+}
 
+////////////////////////////////////////////////////////////////////////////////
+void _(writewith)(char escape, char c)
+{
   switch (c) {
     // https://en.wikipedia.org/wiki/Escape_sequences_in_C
     case '\a':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'a');
       break;
     case '\b':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'b');
       break;
     case '\e':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'e');
       break;
     case '\f':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'f');
       break;
     case '\n':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'n');
       break;
     case '\r':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'r');
       break;
     case '\t':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 't');
       break;
     case '\v':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, 'v');
       break;
     case '\\':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, '\\');
       break;
     case '\'':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, '\'');
       break;
     case '\"':
-      CharStream_put(this, esc);
+      CharStream_put(this, escape);
       CharStream_put(this, '\"');
       break;
     // TODO: (medium): Incomplete: Produce numeric escapes

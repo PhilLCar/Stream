@@ -22,7 +22,9 @@ int  _(get)();
 void _(unget)(char c);
 void _(put)(char c);
 int  _(read)();
+int  _(readwith)(char escape);
 void _(write)(char c);
+void _(writewith)(char escape, char c);
 int  _(eos)();
 
 // Puts the line as is
