@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 Stream *_(cons)(void *stream)
 {
-  if (this) {
+  if (this && stream) {
     const Type *type = gettype(this);
 
     // This will fail if abstract class is not implemented

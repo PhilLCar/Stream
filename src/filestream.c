@@ -5,12 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 FileStream *_(cons)(FILE *stream)
 {
-  if (this) {
-    if (stream) CharStream_cons(BASE(0), stream);
-    else        this = NULL;
-  }
-
-  return this;
+  return (FileStream*)CharStream_cons(BASE(0), stream);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
