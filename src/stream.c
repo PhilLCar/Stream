@@ -19,6 +19,7 @@ Stream *_(cons)(void *stream)
       this = NULL;
     } else {
       this->base = stream;
+      this->eos  = 0;
     }
   }
   
@@ -40,18 +41,13 @@ const void *_(peek)()
 ////////////////////////////////////////////////////////////////////////////////
 const void *_(get)()
 {
-  const void *token = this->get(this);
-
-  this->eos = token == EOS;
-
-  return token;
+  return this->get(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 const void _(unget)(const void *token)
 {
   this->unget(this, token);
-  this->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

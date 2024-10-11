@@ -11,7 +11,6 @@
 #include <oop.h>
 
 #define TYPENAME Stream
-#define EOS      (void*)EOF
 
 // (!) This class must always be initialized using the NEW macro
 OBJECT (void *stream) INHERIT (void*)
@@ -29,6 +28,8 @@ const void *_(peek)();
 const void *_(get)();
 const void  _(unget)(const void *token);
 const void  _(put)(const void *token);
+
+// TODO: Add seek methods
 
 #undef TYPENAME
 #endif

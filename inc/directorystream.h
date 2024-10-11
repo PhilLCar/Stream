@@ -1,17 +1,18 @@
-#ifndef FILESTREAM_H
-#define FILESTREAM_H
+#ifndef DIRECTORYSTREAM_H
+#define DIRECTORYSTREAM_H
 
 // C
 #include <stdio.h>
 
 // CUT
+#include <directory.h>
 #include <oop.h>
-#include <charstream.h>
+#include <stream.h>
 
-#define TYPENAME FileStream
+#define TYPENAME DirectoryStream
 
-OBJECT (FILE *file) INHERIT (CharStream)
-END(stdin);
+OBJECT (const char *directory) INHERIT (Stream)
+END(".");
 
 void  _(close)()            VIRTUAL (close);
 void *_(peek) ()            VIRTUAL (peek);
