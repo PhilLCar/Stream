@@ -5,6 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 FileStream *_(cons)(FILE *stream)
 {
+  // The user is responsible for setting cod in other cases, but these are obvious
+  BASE(1)->cod = stream == stdin || stream == stdout || stream == stderr;
   return (FileStream*)CharStream_cons(BASE(0), stream);
 }
 
@@ -17,38 +19,41 @@ void _(free)()
 ////////////////////////////////////////////////////////////////////////////////
 void _(close)()
 {
-  fclose(*BASE(2));
+  if (BASE(1)->cod)
+  {
+    fclose(*BASE(2));
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void *_(peek)()
+int _(peek)()
 {
-  long c = fgetc(*BASE(2));
+  int c = fgetc(*BASE(2));
 
   ungetc(c, *BASE(2));
 
-  return (void*)c;
+  return c;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void *_(get)()
+int _(get)()
 {
-  long c = fgetc(*BASE(2));
+  int c = fgetc(*BASE(2));
 
   BASE(1)->eos = c == EOF;
 
-  return (void*)c;
+  return c;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(void *token)
+void _(unget)(int c)
 {
-  ungetc((long)token, *BASE(2));
+  ungetc(c, *BASE(2));
   BASE(1)->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(void *token)
+void _(put)(int c)
 {
-  fputc((long)token, *BASE(2));
+  fputc(c, *BASE(2));
 }

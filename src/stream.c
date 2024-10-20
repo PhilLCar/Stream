@@ -20,6 +20,7 @@ Stream *_(cons)(void *stream)
     } else {
       this->base = stream;
       this->eos  = 0;
+      this->cod  = 1;
     }
   }
   
@@ -29,7 +30,16 @@ Stream *_(cons)(void *stream)
 ////////////////////////////////////////////////////////////////////////////////
 void _(free)()
 {
+  if (this->cod) {
+    this->close(this);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const void _(close)()
+{
   this->close(this);
+  this->cod = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +58,7 @@ const void *_(get)()
 const void _(unget)(const void *token)
 {
   this->unget(this, token);
+  this->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

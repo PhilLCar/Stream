@@ -17,25 +17,83 @@ void _(free)()
 ////////////////////////////////////////////////////////////////////////////////
 int _(peek)()
 {
-  return (long)BASE(0)->peek(BASE(0));
+  return ((int(*)(CharStream*))BASE(0)->peek)(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 int _(get)()
 {
-  return (long)BASE(0)->get(BASE(0));
+  return ((int(*)(CharStream*))BASE(0)->get)(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(char c)
+void _(unget)(int c)
 {
-  BASE(0)->unget(BASE(0), (void*)(long)c);
+  ((int(*)(CharStream*,int))BASE(0)->unget)(this, c);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(char c)
+void _(put)(int c)
 {
-  BASE(0)->put(BASE(0), (void*)(long)c);
+  ((int(*)(CharStream*,int))BASE(0)->put)(this, c);
+}
+
+int _(escape)()
+{
+  int c = CharStream_get(this);
+
+  switch (c) {
+    // https://en.wikipedia.org/wiki/Escape_sequences_in_C
+    case 'a':
+      c = '\a';
+      break;
+    case 'b':
+      c = '\b';
+      break;
+    case 'e':
+      c = '\e';
+      break;
+    case 'f':
+      c = '\f';
+      break;
+    case 'n':
+      c = '\n';
+      break;
+    case 'r':
+      c = '\r';
+      break;
+    case 's':
+      c = ' ';
+      break;
+    case 't':
+      c = '\t';
+      break;
+    case 'v':
+      c = '\v';
+      break;
+    case '\\':
+    case '\'':
+    case '\"':
+    case '\n':
+    case '?':
+      // do nothing
+      break;
+    case 'x': // hexa
+      break;
+    case 'X': // HEXA
+    case 'u': // unicode (2 bytes)
+      break;
+    case 'U': // unicode (4 bytes)
+      break;
+    default:
+    // TODO: (medium): Incomplete: Parse numeric escapes
+      if (c > '0' && c <= '9') {
+      } else if (c == '0') {
+      }
+      break;
+  }
+
+  return c;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,76 +103,25 @@ int _(read)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(readwith)(char escape)
+int _(readwith)(int escape)
 {
-  char c = CharStream_get(this);
+  int c = CharStream_get(this);
   
   if (c == escape) {
-    c = CharStream_get(this);
-
-    switch (c) {
-      // https://en.wikipedia.org/wiki/Escape_sequences_in_C
-      case 'a':
-        c = '\a';
-        break;
-      case 'b':
-        c = '\b';
-        break;
-      case 'e':
-        c = '\e';
-        break;
-      case 'f':
-        c = '\f';
-        break;
-      case 'n':
-        c = '\n';
-        break;
-      case 'r':
-        c = '\r';
-        break;
-      case 's':
-        c = ' ';
-        break;
-      case 't':
-        c = '\t';
-        break;
-      case 'v':
-        c = '\v';
-        break;
-      case '\\':
-      case '\'':
-      case '\"':
-      case '\n':
-      case '?':
-        // do nothing
-        break;
-      case 'x': // hexa
-        break;
-      case 'X': // HEXA
-      case 'u': // unicode (2 bytes)
-        break;
-      case 'U': // unicode (4 bytes)
-        break;
-      default:
-      // TODO: (medium): Incomplete: Parse numeric escapes
-        if (c > '0' && c <= '9') {
-        } else if (c == '0') {
-        }
-        break;
-    }
+    c = CharStream_escape(this);
   }
 
   return c;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(write)(char c)
+void _(write)(int c)
 {
   CharStream_writewith(this, '\\', c);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(writewith)(char escape, char c)
+void _(writewith)(int escape, int c)
 {
   switch (c) {
     // https://en.wikipedia.org/wiki/Escape_sequences_in_C

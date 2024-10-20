@@ -14,11 +14,11 @@
 OBJECT (const char *directory) INHERIT (Stream)
 END(".");
 
-void  _(close)()            VIRTUAL (close);
-void *_(peek) ()            VIRTUAL (peek);
-void *_(get)  ()            VIRTUAL (get);
-void  _(unget)(void *token) VIRTUAL (unget);
-void  _(put)(void *token)   VIRTUAL (put);
+void           _(close)()                     VIRTUAL (close);
+DirectoryItem *_(peek) ()                     VIRTUAL (peek);
+DirectoryItem *_(get)  ()                     VIRTUAL (get);
+void           _(unget)(DirectoryItem *token) VIRTUAL (unget);
+void           _(put)  (DirectoryItem *token) VIRTUAL (put);
 
 #undef TYPENAME
 #endif

@@ -14,7 +14,8 @@
 
 // (!) This class must always be initialized using the NEW macro
 OBJECT (void *stream) INHERIT (void*)
-  int eos;
+  int eos; // End of Stream
+  int cod; // Close on Delete
 
   // Abstract methods
   const void  (*close)(Stream *stream);
@@ -24,6 +25,7 @@ OBJECT (void *stream) INHERIT (void*)
   const void  (*put)  (Stream *stream, const void *token);
 END(NULL);
 
+const void  _(close)();
 const void *_(peek)();
 const void *_(get)();
 const void  _(unget)(const void *token);

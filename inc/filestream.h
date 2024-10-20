@@ -13,11 +13,11 @@
 OBJECT (FILE *file) INHERIT (CharStream)
 END(stdin);
 
-void  _(close)()            VIRTUAL (close);
-void *_(peek) ()            VIRTUAL (peek);
-void *_(get)  ()            VIRTUAL (get);
-void  _(unget)(void *token) VIRTUAL (unget);
-void  _(put)(void *token)   VIRTUAL (put);
+void _(close)()      VIRTUAL (close);
+int  _(peek) ()      VIRTUAL (peek);
+int  _(get)  ()      VIRTUAL (get);
+void _(unget)(int c) VIRTUAL (unget);
+void _(put)  (int c) VIRTUAL (put);
 
 #undef TYPENAME
 #endif

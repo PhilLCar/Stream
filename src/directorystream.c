@@ -21,9 +21,9 @@ void _(close)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void *_(peek)()
+DirectoryItem *_(peek)()
 {
-  void              *peek = NULL;
+  DirectoryItem     *peek = NULL;
   DirectoryIterator *iter = (DirectoryIterator*)*BASE(1);
 
   if (iter) {
@@ -34,9 +34,9 @@ void *_(peek)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void *_(get)()
+DirectoryItem *_(get)()
 {
-  void               *get  = NULL;
+  DirectoryItem      *get  = NULL;
   DirectoryIterator **iter = (DirectoryIterator**)BASE(1);
   
   if (*iter) {
@@ -50,19 +50,17 @@ void *_(get)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(void *token)
+void _(unget)(DirectoryItem *token)
 {
   fprintf(stderr, "Cannot unget on directory stream\n");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(void *token)
+void _(put)(DirectoryItem *token)
 {
-  DirectoryItem *item = token;
-
-  if (item->type == DIRTYPE_FILE) {
-    fclose(fopen(item->name, "w+"));
-  } else if (item->type == DIRTYPE_DIRECTORY) {
-    dcreate(item->name);
+  if (token->type == DIRTYPE_FILE) {
+    fclose(fopen(token->name, "w+"));
+  } else if (token->type == DIRTYPE_DIRECTORY) {
+    dcreate(token->name);
   }
 }

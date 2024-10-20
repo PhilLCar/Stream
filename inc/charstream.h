@@ -19,12 +19,14 @@ END(NULL);
 
 int  _(peek)();
 int  _(get)();
-void _(unget)(char c);
-void _(put)(char c);
+void _(unget)(int c);
+void _(put)(int c);
+
+int  _(escape)();
 int  _(read)();
-int  _(readwith)(char escape);
-void _(write)(char c);
-void _(writewith)(char escape, char c);
+int  _(readwith)(int escape);
+void _(write)(int c);
+void _(writewith)(int escape, int c);
 int  _(eos)();
 
 // Puts the line as is
@@ -39,13 +41,13 @@ void    _(writeline)(const char *line);
 
 #undef TYPENAME
 // Shortnames
-__attribute__((unused)) static int  (*cspeek) (CharStream*)       = CharStream_peek;
-__attribute__((unused)) static int  (*csget)  (CharStream*)       = CharStream_get;
-__attribute__((unused)) static void (*csunget)(CharStream*, char) = CharStream_unget;
-__attribute__((unused)) static int  (*csread) (CharStream*)       = CharStream_read;
-__attribute__((unused)) static void (*csput)  (CharStream*, char) = CharStream_put;
-__attribute__((unused)) static void (*cswrite)(CharStream*, char) = CharStream_write;
-__attribute__((unused)) static int  (*cseos)  (CharStream*)       = CharStream_eos;
+__attribute__((unused)) static int  (*cspeek) (CharStream*)      = CharStream_peek;
+__attribute__((unused)) static int  (*csget)  (CharStream*)      = CharStream_get;
+__attribute__((unused)) static void (*csunget)(CharStream*, int) = CharStream_unget;
+__attribute__((unused)) static int  (*csread) (CharStream*)      = CharStream_read;
+__attribute__((unused)) static void (*csput)  (CharStream*, int) = CharStream_put;
+__attribute__((unused)) static void (*cswrite)(CharStream*, int) = CharStream_write;
+__attribute__((unused)) static int  (*cseos)  (CharStream*)      = CharStream_eos;
 
 __attribute__((unused)) static void (*csputstr)   (CharStream*, const char *line) = CharStream_putstr;
 __attribute__((unused)) static void (*cswritestr) (CharStream*, const char *line) = CharStream_writestr;
