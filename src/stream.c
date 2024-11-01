@@ -20,7 +20,7 @@ Stream *_(Construct)(void *stream)
     this->Put    = (void*)virtual(type, "Put");
 
     if (!this->Close || !this->Get || !this->Peek || !this->Unget || !this->Put) {
-      THROW(NEW (Exception)("All abstract methods were not implemented", (long)&OBJECT_TYPE(Stream)));
+      THROW(NEW (Exception)("All abstract methods were not implemented"));
     }
   } else {
     

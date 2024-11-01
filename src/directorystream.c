@@ -52,7 +52,7 @@ DirectoryItem *_(Get)()
 ////////////////////////////////////////////////////////////////////////////////
 void _(Unget)(DirectoryItem *token)
 {
-  THROW(NEW (Exception)("Cannot unget on directory stream", (long)&OBJECT_TYPE(DirectoryStream)));
+  THROW(NEW (Exception)("Cannot unget on directory stream"));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

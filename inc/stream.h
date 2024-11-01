@@ -14,7 +14,7 @@
 #define TYPENAME Stream
 
 // (!) This class must always be initialized using the NEW macro
-OBJECT (void *stream) INHERIT (void*)
+OBJECT (void *stream) BASED (void*)
   int eos; // End of Stream
   int cod; // Close on Destruct
 
