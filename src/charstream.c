@@ -3,44 +3,46 @@
 #define TYPENAME CharStream
 
 ////////////////////////////////////////////////////////////////////////////////
-CharStream *_(cons)(void *stream)
+CharStream *_(Construct)(void *stream)
 {
-  return (CharStream*)Stream_cons(BASE(0), stream);
+  return (CharStream*)Stream_Construct(BASE(0), stream);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(free)()
+void _(Destruct)()
 {
-  Stream_free(BASE(0));
+  if (this) {
+    Stream_Destruct(BASE(0));
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(peek)()
+int _(Peek)()
 {
-  return ((int(*)(CharStream*))BASE(0)->peek)(this);
+  return ((int(*)(CharStream*))BASE(0)->Peek)(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(get)()
+int _(Get)()
 {
-  return ((int(*)(CharStream*))BASE(0)->get)(this);
+  return ((int(*)(CharStream*))BASE(0)->Get)(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(int c)
+void _(Unget)(int c)
 {
-  ((int(*)(CharStream*,int))BASE(0)->unget)(this, c);
+  ((int(*)(CharStream*,int))BASE(0)->Unget)(this, c);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(int c)
+void _(Put)(int c)
 {
-  ((int(*)(CharStream*,int))BASE(0)->put)(this, c);
+  ((int(*)(CharStream*,int))BASE(0)->Put)(this, c);
 }
 
-int _(escape)()
+int _(Escape)()
 {
-  int c = CharStream_get(this);
+  int c = CharStream_Get(this);
 
   switch (c) {
     // https://en.wikipedia.org/wiki/Escape_sequences_in_C
@@ -97,117 +99,119 @@ int _(escape)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(read)()
+int _(Read)()
 {
-  return CharStream_readwith(this, '\\');
+  return CharStream_ReadWith(this, '\\');
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(readwith)(int escape)
+int _(ReadWith)(int escape)
 {
-  int c = CharStream_get(this);
+  int c = CharStream_Get(this);
   
   if (c == escape) {
-    c = CharStream_escape(this);
+    c = CharStream_Escape(this);
   }
 
   return c;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(write)(int c)
+void _(Write)(int c)
 {
-  CharStream_writewith(this, '\\', c);
+  CharStream_WriteWith(this, '\\', c);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(writewith)(int escape, int c)
+void _(WriteWith)(int escape, int c)
 {
   switch (c) {
     // https://en.wikipedia.org/wiki/Escape_sequences_in_C
     case '\a':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'a');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'a');
       break;
     case '\b':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'b');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'b');
       break;
     case '\e':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'e');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'e');
       break;
     case '\f':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'f');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'f');
       break;
     case '\n':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'n');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'n');
       break;
     case '\r':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'r');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'r');
       break;
     case '\t':
-      CharStream_put(this, escape);
-      CharStream_put(this, 't');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 't');
       break;
     case '\v':
-      CharStream_put(this, escape);
-      CharStream_put(this, 'v');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, 'v');
       break;
     case '\\':
-      CharStream_put(this, escape);
-      CharStream_put(this, '\\');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, '\\');
       break;
     case '\'':
-      CharStream_put(this, escape);
-      CharStream_put(this, '\'');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, '\'');
       break;
     case '\"':
-      CharStream_put(this, escape);
-      CharStream_put(this, '\"');
+      CharStream_Put(this, escape);
+      CharStream_Put(this, '\"');
       break;
     // TODO: (medium): Incomplete: Produce numeric escapes
     default:
-      CharStream_put(this, c);
+      CharStream_Put(this, c);
       break;
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(eos)()
+void _(PutString)(const char *line)
+{
+	for (int i = 0; line[i]; i++) {
+		CharStream_Put(this, line[i]);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(WriteString)(const char *line)
+{
+	for (int i = 0; line[i]; i++) {
+		CharStream_Write(this, line[i]);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(PutLine)(const char *line)
+{
+	CharStream_PutString(this, line);
+	CharStream_Put(this, '\n');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(WriteLine)(const char *line)
+{
+	CharStream_WriteString(this, line);
+	CharStream_Put(this, '\n');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+int CONST (EOS)()
 {
   return BASE(0)->eos;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-void _(putstr)(const char *line)
-{
-	for (int i = 0; line[i]; i++) {
-		CharStream_put(this, line[i]);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void _(writestr)(const char *line)
-{
-	for (int i = 0; line[i]; i++) {
-		CharStream_write(this, line[i]);
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void _(putline)(const char *line)
-{
-	CharStream_putstr(this, line);
-	CharStream_put(this, '\n');
-}
-
-////////////////////////////////////////////////////////////////////////////////
-void _(writeline)(const char *line)
-{
-	CharStream_writestr(this, line);
-	CharStream_put(this, '\n');
-}
+#undef TYPENAME

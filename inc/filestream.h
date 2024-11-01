@@ -11,13 +11,13 @@
 #define TYPENAME FileStream
 
 OBJECT (FILE *file) INHERIT (CharStream)
-END(stdin);
+END_OBJECT(stdin);
 
-void _(close)()      VIRTUAL (close);
-int  _(peek) ()      VIRTUAL (peek);
-int  _(get)  ()      VIRTUAL (get);
-void _(unget)(int c) VIRTUAL (unget);
-void _(put)  (int c) VIRTUAL (put);
+void _(Close)()      VIRTUAL (Close);
+int  _(Peek) ()      VIRTUAL (Peek);
+int  _(Get)  ()      VIRTUAL (Get);
+void _(Unget)(int c) VIRTUAL (Unget);
+void _(Put)  (int c) VIRTUAL (Put);
 
 #undef TYPENAME
 #endif

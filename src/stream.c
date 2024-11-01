@@ -3,66 +3,70 @@
 #define TYPENAME Stream
 
 ////////////////////////////////////////////////////////////////////////////////
-Stream *_(cons)(void *stream)
+Stream *_(Construct)(void *stream)
 {
-  if (this && stream) {
+  if (this) {
     const Type *type = gettype(this);
 
-    // This will fail if abstract class is not implemented
-    this->close  = (void*)virtual(type, "close");
-    this->get    = (void*)virtual(type, "get");
-    this->peek   = (void*)virtual(type, "peek");
-    this->unget  = (void*)virtual(type, "unget");
-    this->put    = (void*)virtual(type, "put");
+    this->base = stream;
+    this->eos  = 0;
+    this->cod  = 1;
 
-    if (!this->close || !this->get || !this->peek || !this->unget || !this->put) {
-      this = NULL;
-    } else {
-      this->base = stream;
-      this->eos  = 0;
-      this->cod  = 1;
+    // This will fail if abstract class is not implemented
+    this->Close  = (void*)virtual(type, "Close");
+    this->Get    = (void*)virtual(type, "Get");
+    this->Peek   = (void*)virtual(type, "Peek");
+    this->Unget  = (void*)virtual(type, "Unget");
+    this->Put    = (void*)virtual(type, "Put");
+
+    if (!this->Close || !this->Get || !this->Peek || !this->Unget || !this->Put) {
+      THROW(NEW (Exception)("All abstract methods were not implemented", (long)&OBJECT_TYPE(Stream)));
     }
+  } else {
+    
   }
   
   return this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(free)()
+void _(Destruct)()
 {
-  if (this->cod) {
-    this->close(this);
+  if (this && this->cod) {
+    this->Close(this);
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void _(close)()
+const void _(Close)()
 {
-  this->close(this);
+  this->Close(this);
   this->cod = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void *_(peek)()
+const void *_(Peek)()
 {
-  return this->peek(this);
+  return this->Peek(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void *_(get)()
+const void *_(Get)()
 {
-  return this->get(this);
+  return this->Get(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void _(unget)(const void *token)
+const void _(Unget)(const void *token)
 {
-  this->unget(this, token);
+  this->Unget(this, token);
   this->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 const void _(put)(const void *token)
 {
-  this->put(this, token);
+  this->Put(this, token);
 }
+
+#undef TYPENAME

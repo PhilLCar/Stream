@@ -3,25 +3,25 @@
 #define TYPENAME DirectoryStream
 
 ////////////////////////////////////////////////////////////////////////////////
-DirectoryStream *_(cons)(const char *directory)
+DirectoryStream *_(Construct)(const char *directory)
 {
-  return (DirectoryStream*)Stream_cons(BASE(0), dopen(directory));
+  return (DirectoryStream*)Stream_Construct(BASE(0), dopen(directory));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(free)()
+void _(Destruct)()
 {
-  Stream_free(BASE(0));
+  Stream_Destruct(BASE(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(close)()
+void _(Close)()
 {
   dclose((DirectoryIterator**)BASE(1));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DirectoryItem *_(peek)()
+DirectoryItem *_(Peek)()
 {
   DirectoryItem     *peek = NULL;
   DirectoryIterator *iter = (DirectoryIterator*)*BASE(1);
@@ -34,7 +34,7 @@ DirectoryItem *_(peek)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-DirectoryItem *_(get)()
+DirectoryItem *_(Get)()
 {
   DirectoryItem      *get  = NULL;
   DirectoryIterator **iter = (DirectoryIterator**)BASE(1);
@@ -50,13 +50,13 @@ DirectoryItem *_(get)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(DirectoryItem *token)
+void _(Unget)(DirectoryItem *token)
 {
-  fprintf(stderr, "Cannot unget on directory stream\n");
+  THROW(NEW (Exception)("Cannot unget on directory stream", (long)&OBJECT_TYPE(DirectoryStream)));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(DirectoryItem *token)
+void _(Put)(DirectoryItem *token)
 {
   if (token->type == DIRTYPE_FILE) {
     fclose(fopen(token->name, "w+"));
@@ -64,3 +64,5 @@ void _(put)(DirectoryItem *token)
     dcreate(token->name);
   }
 }
+
+#undef TYPENAME

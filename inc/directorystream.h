@@ -12,13 +12,13 @@
 #define TYPENAME DirectoryStream
 
 OBJECT (const char *directory) INHERIT (Stream)
-END(".");
+END_OBJECT(".");
 
-void           _(close)()                     VIRTUAL (close);
-DirectoryItem *_(peek) ()                     VIRTUAL (peek);
-DirectoryItem *_(get)  ()                     VIRTUAL (get);
-void           _(unget)(DirectoryItem *token) VIRTUAL (unget);
-void           _(put)  (DirectoryItem *token) VIRTUAL (put);
+void           _(Close)()                     VIRTUAL (Close);
+DirectoryItem *_(Peek) ()                     VIRTUAL (Peek);
+DirectoryItem *_(Get)  ()                     VIRTUAL (Get);
+void           _(Unget)(DirectoryItem *token) VIRTUAL (Unget);
+void           _(Put)  (DirectoryItem *token) VIRTUAL (Put);
 
 #undef TYPENAME
 #endif

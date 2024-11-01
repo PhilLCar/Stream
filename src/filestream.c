@@ -3,21 +3,21 @@
 #define TYPENAME FileStream
 
 ////////////////////////////////////////////////////////////////////////////////
-FileStream *_(cons)(FILE *stream)
+FileStream *_(Construct)(FILE *stream)
 {
   // The user is responsible for setting cod in other cases, but these are obvious
   BASE(1)->cod = stream == stdin || stream == stdout || stream == stderr;
-  return (FileStream*)CharStream_cons(BASE(0), stream);
+  return (FileStream*)CharStream_Construct(BASE(0), stream);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(free)()
+void _(Destruct)()
 {
-  CharStream_free(BASE(0));
+  CharStream_Destruct(BASE(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(close)()
+void _(Close)()
 {
   if (BASE(1)->cod)
   {
@@ -26,7 +26,7 @@ void _(close)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(peek)()
+int _(Peek)()
 {
   int c = fgetc(*BASE(2));
 
@@ -36,7 +36,7 @@ int _(peek)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int _(get)()
+int _(Get)()
 {
   int c = fgetc(*BASE(2));
 
@@ -46,14 +46,16 @@ int _(get)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(unget)(int c)
+void _(Unget)(int c)
 {
   ungetc(c, *BASE(2));
   BASE(1)->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(put)(int c)
+void _(Put)(int c)
 {
   fputc(c, *BASE(2));
 }
+
+#undef TYPENAME

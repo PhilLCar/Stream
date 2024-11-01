@@ -14,16 +14,16 @@ int main(void)
   printf("Initialized\n");
   while (1)
   {
-    char c = csget(test);
+    char c = CharStream_Get(test);
 
-    if (cseos(test)) break;
+    if (CharStream_EOS(test)) break;
 
     if (c == '?')
     {
-      csunget(test, '.');
+      CharStream_Unget(test, '.');
       continue;
-    } else if (c == 't' && cspeek(test) == ' ') {
-      csunget(test, ',');
+    } else if (c == 't' && CharStream_Peek(test) == ' ') {
+      CharStream_Unget(test, ',');
     }
 
     printf("%c", c);
@@ -40,7 +40,7 @@ int main(void)
   Stream *dir = (Stream*) NEW (DirectoryStream) (".");
 
   while (1) {
-    const DirectoryItem *item = Stream_get(dir);
+    const DirectoryItem *item = Stream_Get(dir);
 
     if (dir->eos) break;
 
