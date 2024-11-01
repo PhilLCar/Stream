@@ -5,9 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 FileStream *_(Construct)(FILE *stream)
 {
-  // The user is responsible for setting cod in other cases, but these are obvious
-  BASE(1)->cod = stream == stdin || stream == stdout || stream == stderr;
-  return (FileStream*)CharStream_Construct(BASE(0), stream);
+  if (CharStream_Construct(BASE(0), stream)) {
+    // The user is responsible for setting cod in other cases, but these are obvious
+    BASE(1)->cod = stream == stdin || stream == stdout || stream == stderr;
+  }
+
+  return this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
