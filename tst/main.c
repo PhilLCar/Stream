@@ -2,7 +2,6 @@
 
 #include <charstream.h>
 #include <filestream.h>
-#include <directorystream.h>
 #include <stream.h>
 
 int main(void)
@@ -34,20 +33,6 @@ int main(void)
   DELETE (test);
 
   printf("\n%s\n", "Looks like they are!");
-
-  CHECK_MEMORY
-
-  Stream *dir = (Stream*) NEW (DirectoryStream) (".");
-
-  while (1) {
-    const DirectoryItem *item = Stream_Get(dir);
-
-    if (dir->eos) break;
-
-    printf("%s\n", item->name);
-  }
-
-  DELETE (dir);
 
   CHECK_MEMORY
 
