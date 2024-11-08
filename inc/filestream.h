@@ -10,6 +10,11 @@
 
 #define TYPENAME FileStream
 
+typedef enum {
+  FILEACCESS_READ  = 1,
+  FILEACCESS_WRITE = 2
+} FileAccessModes;
+
 OBJECT (FILE *file) INHERIT (CharStream)
 END_OBJECT(stdin);
 
