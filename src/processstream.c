@@ -3,15 +3,25 @@
 #define TYPENAME ProcessStream
 
 ////////////////////////////////////////////////////////////////////////////////
-ProcessStream *_(Construct)(const char *command, int read)
+ProcessStream *_(Construct)(FILE *stream)
 {
-  return (ProcessStream*)CharStream_Construct(BASE(0), popen(command, read ? "r" : "w"));
+  return (ProcessStream*)CharStream_Construct(BASE(0), stream);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 void _(Destruct)()
 {
   CharStream_Destruct(BASE(0));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+ProcessStream *STATIC (Open)(const char *name, AccessModes mode)
+{
+  char buffer[8];
+
+  Stream_Mode(mode, buffer);
+
+  return NEW (ProcessStream) (popen(name, buffer));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

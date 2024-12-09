@@ -10,8 +10,10 @@
 
 #define TYPENAME ProcessStream
 
-OBJECT (const char *command, int read) INHERIT (CharStream)
-END_OBJECT("exit", 0);
+OBJECT (FILE *stream) INHERIT (CharStream)
+END_OBJECT(NULL);
+
+ProcessStream *STATIC (Open)(const char *command, AccessModes mode);
 
 void _(Close)()      VIRTUAL (Close);
 int  _(Peek) ()      VIRTUAL (Peek);

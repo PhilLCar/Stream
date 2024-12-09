@@ -10,13 +10,10 @@
 
 #define TYPENAME FileStream
 
-typedef enum {
-  FILEACCESS_READ  = 1,
-  FILEACCESS_WRITE = 2
-} FileAccessModes;
-
-OBJECT (FILE *file) INHERIT (CharStream)
+OBJECT (FILE* file) INHERIT (CharStream)
 END_OBJECT(stdin);
+
+FileStream *STATIC (Open)(const char *name, AccessModes mode);
 
 void _(Close)()      VIRTUAL (Close);
 int  _(Peek) ()      VIRTUAL (Peek);

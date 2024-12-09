@@ -13,6 +13,13 @@
 
 #define TYPENAME Stream
 
+typedef enum {
+  ACCESS_READ   = 1,
+  ACCESS_WRITE  = 2,
+  ACCESS_APPEND = 4,
+  ACCESS_CREATE = 8
+} AccessModes;
+
 // (!) This class must always be initialized using the NEW macro
 OBJECT (void *stream) BASED (void*)
   int eos; // End of Stream
@@ -33,6 +40,8 @@ const void  _(Unget)(const void *token);
 const void  _(Put)(const void *token);
 
 // TODO: Add seek methods
+
+void STATIC (Mode)(AccessModes mode, char *buffer);
 
 #undef TYPENAME
 #endif

@@ -20,6 +20,16 @@ void _(Destruct)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+FileStream *STATIC (Open)(const char *name, AccessModes mode)
+{
+  char buffer[8];
+
+  Stream_Mode(mode, buffer);
+
+  return NEW (FileStream) (fopen(name, buffer));
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void _(Close)()
 {
   if (BASE(1)->cod)

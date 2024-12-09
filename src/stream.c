@@ -69,4 +69,15 @@ const void _(put)(const void *token)
   this->Put(this, token);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+void STATIC (Mode)(AccessModes mode, char *buffer)
+{
+  const char *read   = mode & ACCESS_READ   ? "r" : "";
+  const char *write  = mode & ACCESS_WRITE  ? "w" : "";
+  const char *append = mode & ACCESS_APPEND ? "a" : "";
+  const char *create = mode & ACCESS_CREATE ? "+" : "";
+
+  sprintf(buffer, "%s%s%s%s", read, write, append, create);
+}
+
 #undef TYPENAME
