@@ -29,14 +29,14 @@ void _(Write)(int c);
 void _(WriteWith)(int escape, int c);
 
 // Puts the line as is
-void    _(PutString)(const char *line);
+void    _(PutStr)(const char *line);
 // Puts the line and generates escape sequences based on the specified escape char
-void    _(WriteString)(const char *line);
+void    _(WriteStr)(const char *line);
 
 // Puts the line as is
-void    _(PutLine)(const char *line);
+void    _(PutLn)(const char *line);
 // Puts the line and generates escape sequences based on the specified escape char
-void    _(WriteLine)(const char *line);
+void    _(WriteLn)(const char *line);
 
 int CONST (EOS)();
 

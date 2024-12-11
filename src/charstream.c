@@ -179,7 +179,7 @@ void _(WriteWith)(int escape, int c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(PutString)(const char *line)
+void _(PutStr)(const char *line)
 {
 	for (int i = 0; line[i]; i++) {
 		CharStream_Put(this, line[i]);
@@ -187,7 +187,7 @@ void _(PutString)(const char *line)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(WriteString)(const char *line)
+void _(WriteStr)(const char *line)
 {
 	for (int i = 0; line[i]; i++) {
 		CharStream_Write(this, line[i]);
@@ -195,16 +195,16 @@ void _(WriteString)(const char *line)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(PutLine)(const char *line)
+void _(PutLn)(const char *line)
 {
-	CharStream_PutString(this, line);
+	CharStream_PutStr(this, line);
 	CharStream_Put(this, '\n');
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void _(WriteLine)(const char *line)
+void _(WriteLn)(const char *line)
 {
-	CharStream_WriteString(this, line);
+	CharStream_WriteStr(this, line);
 	CharStream_Put(this, '\n');
 }
 
