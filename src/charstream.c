@@ -179,6 +179,12 @@ void _(WriteWith)(int escape, int c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+int CONST (EOS)()
+{
+  return BASE(0)->eos;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 void _(PutStr)(const char *line)
 {
 	for (int i = 0; line[i]; i++) {
@@ -209,9 +215,108 @@ void _(WriteLn)(const char *line)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int CONST (EOS)()
+String *_(GetLine)()
 {
-  return BASE(0)->eos;
+	String *line = NEW (String) ("");
+	char c;
+
+	while((c = CharStream_Get(this)) != '\n' && !BASE(0)->eos) {
+    if (c != '\r') String_Append(line, c); 
+  } 
+
+	if (BASE(0)->eos && !line->length) {
+		DELETE (line);
+	}
+
+  return line;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+String *_(ReadLine)()
+{
+	String *line = NEW (String) ("");
+	char c;
+
+	while((c = CharStream_Read(this)) != '\n' && !BASE(0)->eos) {
+    if (c != '\r') String_Append(line, c); 
+  } 
+
+	if (BASE(0)->eos && !line->length) {
+		DELETE (line);
+	}
+
+  return line;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *_(GetToEnd)()
+{
+	String *result = NEW (String) ("");
+
+	String *line;
+
+	while ((line = CharStream_GetLine(this))) {
+		if (result->length) String_Append(result, '\n');
+
+		String_Concat(result, line);
+	}
+
+	DELETE (this);
+
+	return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+String *_(ReadToEnd)()
+{
+	String *result = NEW (String) ("");
+
+	String *line;
+
+	while ((line = CharStream_ReadLine(this))) {
+		if (result->length) String_Append(result, '\n');
+
+		String_Concat(result, line);
+	}
+
+	DELETE (this);
+
+	return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(PutString)(void *object)
+{
+	String *string = String_ToString(object);
+
+	CharStream_PutStr(this, string->base);
+
+	DELETE (string);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(WriteString)(void *object)
+{
+	String *string = String_ToString(object);
+
+	CharStream_WriteStr(this, string->base);
+
+	DELETE (string);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(PutLine)(void *object)
+{
+	CharStream_PutString(this, object);
+	CharStream_Put(this, '\n');
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void _(WriteLine)(void *object)
+{
+	CharStream_WriteString(this, object);
+	CharStream_Put(this, '\n');
+}
+
 
 #undef TYPENAME

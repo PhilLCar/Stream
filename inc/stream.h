@@ -11,6 +11,7 @@
 #include <oop.h>
 #include <exception.h>
 
+// Abstract class
 #define TYPENAME Stream
 
 typedef enum {
