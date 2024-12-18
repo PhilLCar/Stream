@@ -54,16 +54,16 @@ String *_(GetToEnd)();
 // Reads and consume the stream
 String *_(ReadToEnd)();
 
-// Puts and consume the string
+// Puts an object to the stream
 void _(PutString)(void *object);
 
-// Writes and consume the string
+// Writes an object to the stream
 void _(WriteString)(void *object);
 
-// Puts line and consume the string
+// Puts an object to the stream and newline
 void _(PutLine)(void *object);
 
-// Writes line and consume the string
+// Writes an object to the stream and newline
 void _(WriteLine)(void *object);
 
 

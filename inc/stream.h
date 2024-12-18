@@ -22,7 +22,7 @@ typedef enum {
 } AccessModes;
 
 // (!) This class must always be initialized using the NEW macro
-OBJECT (void *stream) BASED (void*)
+OBJECT (void *stream) INHERIT (void*)
   int eos; // End of Stream
   int cod; // Close on Destruct
 
