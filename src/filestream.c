@@ -26,6 +26,10 @@ FileStream *STATIC (Open)(const char *name, AccessModes mode)
 
   Stream_Mode(mode, buffer);
 
+  if (mode & ACCESS_CREATE && !fileexists(name, FILE_EXISTS)) {
+    filecreate(name);
+  }
+
   return NEW (FileStream) (fopen(name, buffer));
 }
 

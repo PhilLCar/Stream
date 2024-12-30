@@ -8,6 +8,7 @@
 #include <diagnostic.h>
 #include <oop.h>
 #include <charstream.h>
+#include <file.h>
 
 #define TYPENAME FileStream
 
