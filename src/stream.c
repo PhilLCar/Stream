@@ -38,7 +38,7 @@ void _(Destruct)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void _(Close)()
+void _(Close)()
 {
   this->Close(this);
   this->cod = 0;
@@ -57,14 +57,14 @@ const void *_(Get)()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void _(Unget)(const void *token)
+void _(Unget)(const void *token)
 {
   this->Unget(this, token);
   this->eos = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const void _(put)(const void *token)
+void _(put)(const void *token)
 {
   this->Put(this, token);
 }

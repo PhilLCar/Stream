@@ -37,11 +37,11 @@ OBJECT (void *stream) INHERIT (void*)
   const void  (*Put)  (Stream *stream, const void *token);
 END_OBJECT(NULL);
 
-STREAM_EXPORT const void  _(Close)();
+STREAM_EXPORT       void  _(Close)();
 STREAM_EXPORT const void *_(Peek)();
 STREAM_EXPORT const void *_(Get)();
-STREAM_EXPORT const void  _(Unget)(const void *token);
-STREAM_EXPORT const void  _(Put)(const void *token);
+STREAM_EXPORT       void  _(Unget)(const void *token);
+STREAM_EXPORT       void  _(Put)(const void *token);
 
 // TODO: Add seek methods
 
